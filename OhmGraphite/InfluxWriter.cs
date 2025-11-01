@@ -58,6 +58,15 @@ namespace OhmGraphite
                 {"sensor_index", sensor.SensorIndex}
             };
 
+            if (string.Equals(sensor.Sensor, "who", StringComparison.OrdinalIgnoreCase))
+            {
+                // Take the string we stored in HardwareInstance
+                var whoValue = sensor.HardwareInstance ?? "Idle";
+
+                // Influx line protocol client will quote string fields automatically
+                fields["who"] = whoValue;
+            }
+
             return new LineProtocolPoint(sensorType, fields, tags, reportTime.ToUniversalTime());
         }
 

@@ -50,7 +50,7 @@ namespace OhmGraphite
 
             var interval = TimeSpan.FromSeconds(seconds);
 
-            INameResolution nameLookup = NameLookup(config["name_lookup"] ?? "netbios");
+            INameResolution nameLookup = NameLookup(config["name_lookup"] ?? "machinename");
             InstallCertificateVerification(config["certificate_verification"] ?? "True");
             var enabledHardware = ParseEnabledHardware(config);
 
@@ -128,6 +128,18 @@ namespace OhmGraphite
                     return new DnsResolution();
                 case "netbios":
                     return new NetBiosResolution();
+                case "machinename":
+                    string shortHost;
+                    try
+                    {
+                        string fullHost = Dns.GetHostEntry(Dns.GetHostName()).HostName;
+                        shortHost = fullHost.Split('.')[0].ToLower();
+                    }
+                    catch
+                    {
+                        shortHost = Environment.MachineName.ToLower();
+                    }
+                    return new StaticResolution(shortHost);
                 default:
                     return new StaticResolution(lookup);
             }

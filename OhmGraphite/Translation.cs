@@ -29,6 +29,7 @@ namespace OhmGraphite
         Noise, // dBA
         Humidity, // %
         Conductivity, // µS/cm
+        UserSessions,
     }
 
     /// <summary>
@@ -50,6 +51,7 @@ namespace OhmGraphite
         PSU,
         EmbeddedController,
         Battery,
+        OS,
     }
 
     public static class TranslationExtension

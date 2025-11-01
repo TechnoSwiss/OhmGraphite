@@ -42,11 +42,13 @@ namespace OhmGraphite
                 IsBatteryEnabled = config.EnabledHardware.Battery,
             };
 
-            var collector = new SensorCollector(computer, config);
+            var hwCollector = new SensorCollector(computer, config);
+            var sessionCollector = new SessionCollector();
+            var collector = new CompositeCollector(hwCollector, sessionCollector);
             return CreateManager(config, collector);
         }
 
-        private static IManage CreateManager(MetricConfig config, SensorCollector collector)
+        private static IManage CreateManager(MetricConfig config, IGiveSensors collector)
         {
             var hostname = config.LookupName();
             double seconds = config.Interval.TotalSeconds;
